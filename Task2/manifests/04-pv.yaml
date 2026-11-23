@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain   # data survives PVC deletion
+  storageClassName: ""                    # static provisioning — no StorageClass
+  hostPath:
+    path: /mnt/data/mysql                 # directory on the node
+  # Pin to minikube-m02 so the PV and the MySQL Pod always land on the same node
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube-m02

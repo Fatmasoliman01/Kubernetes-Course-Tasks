@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-config
+  namespace: webapp-stack
+data:
+  APP_TITLE:       "MLOPS MENA Guestbook"
+  MYSQL_HOST:      "mysql-svc"          # Service name — DNS resolves inside the cluster
+  MYSQL_PORT:      "3306"
+  MYSQL_USER:      "guestbook"
+  MYSQL_DATABASE:  "guestbook"

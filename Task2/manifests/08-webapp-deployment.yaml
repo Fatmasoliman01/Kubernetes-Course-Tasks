@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-api
+  namespace: webapp-stack
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webapp-api
+  template:
+    metadata:
+      labels:
+        app: webapp-api
+    spec:
+      containers:
+        - name: webapp-api
+          image: webapp-api:task2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          # All keys from ConfigMap arrive as env vars (APP_TITLE, MYSQL_HOST, etc.)
+          envFrom:
+            - configMapRef:
+                name: webapp-config
+          # DB_PASSWORD comes from Secret — kept separate from ConfigMap
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: DB_PASSWORD
